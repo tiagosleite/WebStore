@@ -8,7 +8,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WebStore.Domain.CommandHandlers;
+using WebStore.Domain.Repositories;
 using WebStore.Infrastructure.Contexts;
+using WebStore.Infrastructure.Repositories;
 
 namespace WebStore.Api
 {
@@ -22,6 +25,11 @@ namespace WebStore.Api
         }
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
+            
+            services.AddTransient<ICustomerRepository, CustomerRepository>();
+            services.AddTransient<CustomerCommandHandler, CustomerCommandHandler>();
+
             services.AddDbContext<WebStoreContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
         }
 
@@ -32,10 +40,7 @@ namespace WebStore.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!");
-            });
+            app.UseMvc();
         }
     }
 }
