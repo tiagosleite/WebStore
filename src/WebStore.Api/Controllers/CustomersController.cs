@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
 using WebStore.Domain.CommandHandlers;
 using WebStore.Domain.Commands.CustomerCommands;
@@ -15,6 +16,23 @@ namespace WebStore.Api.Controllers
         {
             _handler = handler;
             _repository = repository;
+        }
+
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return Ok(_repository.ListAll());
+        }
+
+        [HttpGet("{id:guid}")]
+        public IActionResult Get(Guid id)
+        {
+            var customer = _repository.GetById(id);
+
+            if (customer == null)
+                return NotFound();
+            
+            return Ok(customer);
         }
 
         [HttpPost]
