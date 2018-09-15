@@ -25,7 +25,7 @@ namespace UnitTests.Repositories
             return new Customer(Guid.NewGuid(), "Random Name", email, "+1 1234 5678");
         }
 
-        public Customer GetById(int id)
+        public Customer GetById(Guid id)
         {
             throw new System.NotImplementedException();
         }
