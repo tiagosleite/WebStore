@@ -1,10 +1,13 @@
+using System;
 using System.Collections.Generic;
+using WebStore.Shared.Entities;
 
 namespace WebStore.Domain.Entities
 {
-    public class Customer
+    public class Customer : BaseEntity
     {
-        public Customer(string name, string email, string phone)
+        public Customer(Guid id, string name, string email, string phone)
+            : base(id)
         {
             Name = name;
             Email = email;
@@ -22,5 +25,15 @@ namespace WebStore.Domain.Entities
         public string Phone { get; private set; }
         public IReadOnlyCollection<Address> Addresses => _addresses.AsReadOnly();
         public IReadOnlyCollection<PaymentMethod> PaymentMethods => _paymentMethods.AsReadOnly();
+
+        public void AddAddress(Address address)
+        {
+            // TODO: Implement
+        }
+
+        public void AddPaymentMethod(PaymentMethod paymentMethod)
+        {
+            // TODO: Implement
+        }
     }
 }

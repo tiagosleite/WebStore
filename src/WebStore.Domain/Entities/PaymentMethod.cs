@@ -1,8 +1,12 @@
+using System;
+using WebStore.Shared.Entities;
+
 namespace WebStore.Domain.Entities
 {
-    public class PaymentMethod
+    public class PaymentMethod : BaseEntity
     {
-        public PaymentMethod(string alias, string cardId, string last4)
+        public PaymentMethod(Guid id, string alias, string cardId, string last4)
+            : base(id)
         {
             Alias = alias;
             CardId = cardId;

@@ -1,10 +1,13 @@
+using System;
 using WebStore.Domain.Enums;
+using WebStore.Shared.Entities;
 
 namespace WebStore.Domain.Entities
 {
-    public class Address
+    public class Address : BaseEntity
     {
-        public Address(string street, string city, string state, string country, string zipCode, EAddressType type)
+        public Address(Guid id, string street, string city, string state, string country, string zipCode, EAddressType type)
+            : base(id)
         {
             Street = street;
             City = city;
