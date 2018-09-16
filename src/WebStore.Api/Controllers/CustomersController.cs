@@ -80,5 +80,16 @@ namespace WebStore.Api.Controllers
 
             return Ok(result);
         }
+
+        [HttpDelete]
+        public IActionResult Delete([FromBody]DeleteCustomerCommand command)
+        {
+            var result = _handler.Handle(command);
+            
+            if (!result.IsValid)
+                return BadRequest(result);
+
+            return Ok(result);
+        }
     }
 }

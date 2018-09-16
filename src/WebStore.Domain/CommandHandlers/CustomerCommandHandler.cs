@@ -13,7 +13,8 @@ namespace WebStore.Domain.CommandHandlers
         ICommandHandler<CreateCustomerCommand>,
         ICommandHandler<CreateAddressCommand>,
         ICommandHandler<CreatePaymentMethodCommand>,
-        ICommandHandler<UpdateCustomerCommand>
+        ICommandHandler<UpdateCustomerCommand>,
+        ICommandHandler<DeleteCustomerCommand>
     {
         private readonly ICustomerRepository _repository;
 
@@ -97,6 +98,11 @@ namespace WebStore.Domain.CommandHandlers
         public CommandResult Handle(UpdateCustomerCommand command)
         {
             var result = command.Validate();
+            
+            var customerInDb = _repository.GetById(command.Id);
+
+            if(customerInDb == null)
+                result.Messages.Add("Customer not found with the given Id");
 
             if(result.IsValid)
             {
@@ -105,6 +111,19 @@ namespace WebStore.Domain.CommandHandlers
                 result.Value = customer;
             }
             
+            return result;
+        }
+
+        public CommandResult Handle(DeleteCustomerCommand command)
+        {
+            var result = command.Validate();
+
+            if(result.IsValid)
+            {
+                var customer = new Customer(command.Id, command.Name, command.Email, command.Phone);
+                _repository.Delete(customer);
+            }
+
             return result;
         }
     }
