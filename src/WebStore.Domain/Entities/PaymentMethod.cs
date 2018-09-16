@@ -16,5 +16,11 @@ namespace WebStore.Domain.Entities
         public string Alias { get; private set; }
         public string CardId { get; private set; }
         public string Last4 { get; private set; }
+        public Guid CustomerId { get; private set; }
+
+        public void SetCustomerId(Guid customerId)
+        {
+            CustomerId = customerId;
+        }
     }
 }

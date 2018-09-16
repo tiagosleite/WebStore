@@ -34,6 +34,7 @@ namespace WebStore.Domain.Entities
 
         public void AddPaymentMethod(PaymentMethod paymentMethod)
         {
+            paymentMethod.SetCustomerId(Id);
             _paymentMethods.Add(paymentMethod);
         }
     }

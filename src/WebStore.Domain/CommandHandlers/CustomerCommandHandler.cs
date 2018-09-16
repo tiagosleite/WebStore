@@ -2,13 +2,17 @@ using System;
 using WebStore.Domain.Commands;
 using WebStore.Domain.Commands.AddressCommands;
 using WebStore.Domain.Commands.CustomerCommands;
+using WebStore.Domain.Commands.PaymentMethodCommands;
 using WebStore.Domain.Entities;
 using WebStore.Domain.Repositories;
 using WebStore.Shared.Commands;
 
 namespace WebStore.Domain.CommandHandlers
 {
-    public class CustomerCommandHandler : ICommandHandler<CreateCustomerCommand>, ICommandHandler<CreateAddressCommand>
+    public class CustomerCommandHandler :
+        ICommandHandler<CreateCustomerCommand>,
+        ICommandHandler<CreateAddressCommand>,
+        ICommandHandler<CreatePaymentMethodCommand>
     {
         private readonly ICustomerRepository _repository;
 
@@ -53,6 +57,35 @@ namespace WebStore.Domain.CommandHandlers
             {
                 var address = new Address(Guid.NewGuid(), command.Street, command.City, command.State, command.Country, command.ZipCode, command.Type);
                 customer.AddAddress(address);
+                _repository.Update(customer);
+                result.Value = customer;
+            }
+
+            return result;
+        }
+
+        public CommandResult Handle(CreatePaymentMethodCommand command, Guid customerId)
+        {
+            command.CustomerId = customerId;
+            return Handle(command);
+        }
+
+        public CommandResult Handle(CreatePaymentMethodCommand command)
+        {
+            var result = command.Validate();
+
+            var customer = _repository.GetById(command.CustomerId);
+
+            if(customer == null)
+            {
+                result.Messages.Add("Customer not found with the given Id");
+                return result;
+            }
+
+            if(result.IsValid)
+            {
+                var paymentMethod = new PaymentMethod(Guid.NewGuid(), command.Alias, command.CardId, command.Last4);
+                customer.AddPaymentMethod(paymentMethod);
                 _repository.Update(customer);
                 result.Value = customer;
             }

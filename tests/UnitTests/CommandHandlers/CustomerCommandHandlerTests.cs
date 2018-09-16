@@ -3,6 +3,7 @@ using UnitTests.Repositories;
 using WebStore.Domain.CommandHandlers;
 using WebStore.Domain.Commands.AddressCommands;
 using WebStore.Domain.Commands.CustomerCommands;
+using WebStore.Domain.Commands.PaymentMethodCommands;
 using WebStore.Domain.Enums;
 using Xunit;
 
@@ -47,6 +48,28 @@ namespace UnitTests.CommandHandlers
         public void ShouldNotCreateAddress_When_CommandIsInvalid()
         {
             var command = new CreateAddressCommand("", "", "", "", "", EAddressType.Billing, Guid.NewGuid());
+            var handler = new CustomerCommandHandler(new CustomerRepositoryMock());
+
+            var result = handler.Handle(command);
+
+            Assert.False(result.IsValid);
+        }
+
+        [Fact]
+        public void ShouldCreatePaymentMethod_When_CommandIsValid()
+        {
+            var command = new CreatePaymentMethodCommand("James B", "1234 1234 1234 1234", "1234", Guid.NewGuid());
+            var handler = new CustomerCommandHandler(new CustomerRepositoryMock());
+
+            var result = handler.Handle(command);
+
+            Assert.True(result.IsValid);
+        }
+
+        [Fact]
+        public void ShouldNotCreatePaymentMethod_When_CommandIsInvalid()
+        {
+            var command = new CreatePaymentMethodCommand("", "", "", Guid.NewGuid());
             var handler = new CustomerCommandHandler(new CustomerRepositoryMock());
 
             var result = handler.Handle(command);

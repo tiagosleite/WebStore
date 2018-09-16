@@ -19,7 +19,10 @@ namespace WebStore.Infrastructure.Repositories
 
         public Customer GetByIdWithAddressesAndPaymentMethods(Guid id)
         {
-            return _context.Set<Customer>().Include(c => c.Addresses).FirstOrDefault(c => c.Id == id);
+            return _context.Set<Customer>()
+                .Include(c => c.Addresses)
+                .Include(c => c.PaymentMethods)
+                .FirstOrDefault(c => c.Id == id);
         }
     }
 }

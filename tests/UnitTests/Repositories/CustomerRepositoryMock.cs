@@ -42,7 +42,7 @@ namespace UnitTests.Repositories
 
         public void Update(Customer entity)
         {
-            throw new System.NotImplementedException();
+            
         }
     }
 }

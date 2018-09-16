@@ -14,10 +14,15 @@ namespace WebStore.Infrastructure.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var navigation = modelBuilder.Entity<Customer>()
+            var navigationCustomerAddresses = modelBuilder.Entity<Customer>()
                 .Metadata.FindNavigation(nameof(Customer.Addresses));
             
-            navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+            navigationCustomerAddresses.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+            var navigationCustomerPaymentMethods = modelBuilder.Entity<Customer>()
+                .Metadata.FindNavigation(nameof(Customer.PaymentMethods));
+            
+            navigationCustomerPaymentMethods.SetPropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 }

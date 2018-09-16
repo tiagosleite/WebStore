@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebStore.Domain.CommandHandlers;
 using WebStore.Domain.Commands.AddressCommands;
 using WebStore.Domain.Commands.CustomerCommands;
+using WebStore.Domain.Commands.PaymentMethodCommands;
 using WebStore.Domain.Repositories;
 
 namespace WebStore.Api.Controllers
@@ -32,7 +33,7 @@ namespace WebStore.Api.Controllers
 
             if (customer == null)
                 return NotFound();
-            
+
             return Ok(customer);
         }
 
@@ -41,9 +42,9 @@ namespace WebStore.Api.Controllers
         {
             var result = _handler.Handle(command);
 
-            if(!result.IsValid)
+            if (!result.IsValid)
                 return BadRequest(result);
-            
+
             return Ok(result);
         }
 
@@ -51,10 +52,21 @@ namespace WebStore.Api.Controllers
         public IActionResult Post(Guid customerId, [FromBody]CreateAddressCommand command)
         {
             var result = _handler.Handle(command, customerId);
-            
-            if(!result.IsValid)
+
+            if (!result.IsValid)
                 return BadRequest(result);
-            
+
+            return Ok(result);
+        }
+
+        [HttpPost("{customerId}/paymentMethod")]
+        public IActionResult Post(Guid customerId, [FromBody]CreatePaymentMethodCommand command)
+        {
+            var result = _handler.Handle(command, customerId);
+
+            if (!result.IsValid)
+                return BadRequest(result);
+
             return Ok(result);
         }
     }
