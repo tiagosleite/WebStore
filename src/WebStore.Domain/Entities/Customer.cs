@@ -28,12 +28,13 @@ namespace WebStore.Domain.Entities
 
         public void AddAddress(Address address)
         {
-            // TODO: Implement
+            address.SetCustomerId(Id);
+            _addresses.Add(address);
         }
 
         public void AddPaymentMethod(PaymentMethod paymentMethod)
         {
-            // TODO: Implement
+            _paymentMethods.Add(paymentMethod);
         }
     }
 }

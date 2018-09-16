@@ -1,6 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
 using WebStore.Domain.CommandHandlers;
+using WebStore.Domain.Commands.AddressCommands;
 using WebStore.Domain.Commands.CustomerCommands;
 using WebStore.Domain.Repositories;
 
@@ -27,7 +28,7 @@ namespace WebStore.Api.Controllers
         [HttpGet("{id:guid}")]
         public IActionResult Get(Guid id)
         {
-            var customer = _repository.GetById(id);
+            var customer = _repository.GetByIdWithAddressesAndPaymentMethods(id);
 
             if (customer == null)
                 return NotFound();
@@ -40,6 +41,17 @@ namespace WebStore.Api.Controllers
         {
             var result = _handler.Handle(command);
 
+            if(!result.IsValid)
+                return BadRequest(result);
+            
+            return Ok(result);
+        }
+
+        [HttpPost("{customerId:guid}/address")]
+        public IActionResult Post(Guid customerId, [FromBody]CreateAddressCommand command)
+        {
+            var result = _handler.Handle(command, customerId);
+            
             if(!result.IsValid)
                 return BadRequest(result);
             

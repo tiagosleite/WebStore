@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using WebStore.Domain.Entities;
 using WebStore.Domain.Repositories;
 using WebStore.Infrastructure.Contexts;
@@ -13,6 +15,11 @@ namespace WebStore.Infrastructure.Repositories
         public Customer GetByEmail(string email)
         {
             return _context.Set<Customer>().FirstOrDefault(c => c.Email == email);
+        }
+
+        public Customer GetByIdWithAddressesAndPaymentMethods(Guid id)
+        {
+            return _context.Set<Customer>().Include(c => c.Addresses).FirstOrDefault(c => c.Id == id);
         }
     }
 }

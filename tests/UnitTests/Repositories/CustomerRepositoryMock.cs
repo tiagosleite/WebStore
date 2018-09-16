@@ -27,7 +27,12 @@ namespace UnitTests.Repositories
 
         public Customer GetById(Guid id)
         {
-            throw new System.NotImplementedException();
+            return new Customer(id, "James Bond", "james.bond@gmail.com", "+ 1234 5678");
+        }
+
+        public Customer GetByIdWithAddressesAndPaymentMethods(Guid id)
+        {
+            throw new NotImplementedException();
         }
 
         public IEnumerable<Customer> ListAll()

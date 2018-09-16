@@ -23,5 +23,11 @@ namespace WebStore.Domain.Entities
         public string Country { get; private set; }
         public string ZipCode { get; private set; }
         public EAddressType Type { get; private set; }
+        public Guid CustomerId { get; private set; }
+
+        public void SetCustomerId(Guid customerId)
+        {
+            CustomerId = customerId;
+        }
     }
 }

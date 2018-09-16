@@ -11,5 +11,13 @@ namespace WebStore.Infrastructure.Contexts
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<PaymentMethod> PaymentMethods { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            var navigation = modelBuilder.Entity<Customer>()
+                .Metadata.FindNavigation(nameof(Customer.Addresses));
+            
+            navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+        }
     }
 }
