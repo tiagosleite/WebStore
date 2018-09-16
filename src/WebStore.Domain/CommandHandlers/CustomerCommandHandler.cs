@@ -12,7 +12,8 @@ namespace WebStore.Domain.CommandHandlers
     public class CustomerCommandHandler :
         ICommandHandler<CreateCustomerCommand>,
         ICommandHandler<CreateAddressCommand>,
-        ICommandHandler<CreatePaymentMethodCommand>
+        ICommandHandler<CreatePaymentMethodCommand>,
+        ICommandHandler<UpdateCustomerCommand>
     {
         private readonly ICustomerRepository _repository;
 
@@ -90,6 +91,20 @@ namespace WebStore.Domain.CommandHandlers
                 result.Value = customer;
             }
 
+            return result;
+        }
+
+        public CommandResult Handle(UpdateCustomerCommand command)
+        {
+            var result = command.Validate();
+
+            if(result.IsValid)
+            {
+                var customer = new Customer(command.Id, command.Name, command.Email, command.Phone);
+                _repository.Update(customer);
+                result.Value = customer;
+            }
+            
             return result;
         }
     }

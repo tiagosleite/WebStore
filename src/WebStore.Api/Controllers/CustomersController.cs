@@ -69,5 +69,16 @@ namespace WebStore.Api.Controllers
 
             return Ok(result);
         }
+
+        [HttpPut]
+        public IActionResult Put([FromBody]UpdateCustomerCommand command)
+        {
+            var result = _handler.Handle(command);
+            
+            if (!result.IsValid)
+                return BadRequest(result);
+
+            return Ok(result);
+        }
     }
 }

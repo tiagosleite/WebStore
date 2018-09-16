@@ -1,3 +1,4 @@
+using System;
 using FluentValidation;
 using WebStore.Domain.Commands.CustomerCommands;
 
@@ -5,6 +6,12 @@ namespace WebStore.Domain.Validations.CustomerValidations
 {
     public abstract class CustomerValidation<T> : AbstractValidator<T> where T : CustomerCommand
     {
+        public void ValidateId()
+        {
+            RuleFor(c => c.Id)
+                .NotEqual(Guid.Empty);
+        }
+        
         protected void ValidateName()
         {
             RuleFor(c => c.Name)
