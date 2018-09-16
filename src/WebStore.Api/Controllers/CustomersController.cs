@@ -59,7 +59,7 @@ namespace WebStore.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPost("{customerId}/paymentMethod")]
+        [HttpPost("{customerId}/payment-method")]
         public IActionResult Post(Guid customerId, [FromBody]CreatePaymentMethodCommand command)
         {
             var result = _handler.Handle(command, customerId);
