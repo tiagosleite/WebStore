@@ -1,3 +1,4 @@
+using System;
 using FluentValidation;
 using WebStore.Domain.Commands.AddressCommands;
 
@@ -5,6 +6,12 @@ namespace WebStore.Domain.Validations.AddressValidations
 {
     public abstract class AddressValidation<T> : AbstractValidator<T> where T : AddressCommand
     {
+        protected void ValidateId()
+        {
+            RuleFor(a => a.Id)
+                .NotEqual(Guid.Empty);
+        }
+
         protected void ValidateStreet()
         {
             RuleFor(a => a.Street)

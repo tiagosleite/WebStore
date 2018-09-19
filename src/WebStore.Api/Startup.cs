@@ -28,7 +28,9 @@ namespace WebStore.Api
             services.AddMvc();
             
             services.AddTransient<ICustomerRepository, CustomerRepository>();
+            services.AddTransient<IAddressRepository, AddressRepository>();
             services.AddTransient<CustomerCommandHandler, CustomerCommandHandler>();
+            services.AddTransient<AddressCommandHandler, AddressCommandHandler>();
 
             services.AddDbContext<WebStoreContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
         }

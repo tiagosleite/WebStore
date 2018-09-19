@@ -24,9 +24,9 @@ namespace WebStore.Infrastructure.Repositories
             return entity;
         }
 
-        public void Delete(T entity)
+        public void Delete(Guid id)
         {
-            _context.Set<T>().Remove(entity);
+            _context.Set<T>().Remove(_context.Set<T>().Find(id));
             _context.SaveChanges();
         }
 

@@ -10,6 +10,6 @@ namespace WebStore.Domain.Repositories
         IEnumerable<T> ListAll();
         T Add(T entity);
         void Update(T entity);
-        void Delete(T entity);
+        void Delete(Guid id);
     }
 }

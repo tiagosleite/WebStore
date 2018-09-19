@@ -12,7 +12,7 @@ namespace UnitTests.Repositories
             return new Customer(Guid.NewGuid(), entity.Name, entity.Email, entity.Phone);
         }
 
-        public void Delete(Customer entity)
+        public void Delete(Guid id)
         {
             throw new System.NotImplementedException();
         }

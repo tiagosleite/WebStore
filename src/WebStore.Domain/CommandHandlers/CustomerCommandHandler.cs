@@ -11,59 +11,31 @@ namespace WebStore.Domain.CommandHandlers
 {
     public class CustomerCommandHandler :
         ICommandHandler<CreateCustomerCommand>,
-        ICommandHandler<CreateAddressCommand>,
         ICommandHandler<CreatePaymentMethodCommand>,
         ICommandHandler<UpdateCustomerCommand>,
         ICommandHandler<DeleteCustomerCommand>
     {
-        private readonly ICustomerRepository _repository;
+        private readonly ICustomerRepository _customerRepository;
+        private readonly IAddressRepository _addressRepository;
 
-        public CustomerCommandHandler(ICustomerRepository repository)
+        public CustomerCommandHandler(ICustomerRepository customerRepository, IAddressRepository addressRepository)
         {
-            _repository = repository;
+            _customerRepository = customerRepository;
+            _addressRepository = addressRepository;
         }
 
         public CommandResult Handle(CreateCustomerCommand command)
         {
             var result = command.Validate();
 
-            if (_repository.GetByEmail(command.Email) != null)
+            if (_customerRepository.GetByEmail(command.Email) != null)
                 result.Messages.Add("Email has already been taken");
 
             if (result.IsValid)
-                result.Value = _repository.Add(new Customer(Guid.NewGuid(), command.Name, command.Email, command.Phone));
+                result.Value = _customerRepository.Add(new Customer(Guid.NewGuid(), command.Name, command.Email, command.Phone));
 
             return result;
 
-        }
-
-        public CommandResult Handle(CreateAddressCommand command, Guid customerId)
-        {
-            command.CustomerId = customerId;
-            return Handle(command);
-        }
-
-        public CommandResult Handle(CreateAddressCommand command)
-        {
-            var result = command.Validate();
-
-            var customer = _repository.GetById(command.CustomerId);
-
-            if (customer == null)
-            {
-                result.Messages.Add("Customer not found with the given Id");
-                return result;
-            }
-
-            if (result.IsValid)
-            {
-                var address = new Address(Guid.NewGuid(), command.Street, command.City, command.State, command.Country, command.ZipCode, command.Type);
-                customer.AddAddress(address);
-                _repository.Update(customer);
-                result.Value = customer;
-            }
-
-            return result;
         }
 
         public CommandResult Handle(CreatePaymentMethodCommand command, Guid customerId)
@@ -76,7 +48,7 @@ namespace WebStore.Domain.CommandHandlers
         {
             var result = command.Validate();
 
-            var customer = _repository.GetById(command.CustomerId);
+            var customer = _customerRepository.GetById(command.CustomerId);
 
             if(customer == null)
             {
@@ -88,7 +60,7 @@ namespace WebStore.Domain.CommandHandlers
             {
                 var paymentMethod = new PaymentMethod(Guid.NewGuid(), command.Alias, command.CardId, command.Last4);
                 customer.AddPaymentMethod(paymentMethod);
-                _repository.Update(customer);
+                _customerRepository.Update(customer);
                 result.Value = customer;
             }
 
@@ -99,7 +71,7 @@ namespace WebStore.Domain.CommandHandlers
         {
             var result = command.Validate();
             
-            var customerInDb = _repository.GetById(command.Id);
+            var customerInDb = _customerRepository.GetById(command.Id);
 
             if(customerInDb == null)
                 result.Messages.Add("Customer not found with the given Id");
@@ -107,7 +79,7 @@ namespace WebStore.Domain.CommandHandlers
             if(result.IsValid)
             {
                 var customer = new Customer(command.Id, command.Name, command.Email, command.Phone);
-                _repository.Update(customer);
+                _customerRepository.Update(customer);
                 result.Value = customer;
             }
             
@@ -120,8 +92,8 @@ namespace WebStore.Domain.CommandHandlers
 
             if(result.IsValid)
             {
-                var customer = new Customer(command.Id, command.Name, command.Email, command.Phone);
-                _repository.Delete(customer);
+                // var customer = new Customer(command.Id, command.Name, command.Email, command.Phone);
+                _customerRepository.Delete(command.Id);
             }
 
             return result;

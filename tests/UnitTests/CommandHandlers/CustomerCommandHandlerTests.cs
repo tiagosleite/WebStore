@@ -15,7 +15,7 @@ namespace UnitTests.CommandHandlers
         public void ShouldCreateCustomer_When_CommandIsValid()
         {
             var command = new CreateCustomerCommand("James Bond", "james.bond@domain.com", "+44 1111 1111");
-            var handler = new CustomerCommandHandler(new CustomerRepositoryMock());
+            var handler = new CustomerCommandHandler(new CustomerRepositoryMock(), null);
 
             var result = handler.Handle(command);
 
@@ -26,7 +26,7 @@ namespace UnitTests.CommandHandlers
         public void ShouldNotCreateCustomer_When_CommandIsInvalid()
         {
             var command = new CreateCustomerCommand("", "", "");
-            var handler = new CustomerCommandHandler(new CustomerRepositoryMock());
+            var handler = new CustomerCommandHandler(new CustomerRepositoryMock(), null);
 
             var result = handler.Handle(command);
 
@@ -37,7 +37,7 @@ namespace UnitTests.CommandHandlers
         public void ShouldCreateAddress_When_CommandIsValid()
         {
             var command = new CreateAddressCommand("Street One", "London", "LND", "England", "77777", EAddressType.Billing, Guid.NewGuid());
-            var handler = new CustomerCommandHandler(new CustomerRepositoryMock());
+            var handler = new AddressCommandHandler(null);
 
             var result = handler.Handle(command);
 
@@ -48,7 +48,7 @@ namespace UnitTests.CommandHandlers
         public void ShouldNotCreateAddress_When_CommandIsInvalid()
         {
             var command = new CreateAddressCommand("", "", "", "", "", EAddressType.Billing, Guid.NewGuid());
-            var handler = new CustomerCommandHandler(new CustomerRepositoryMock());
+            var handler = new AddressCommandHandler(null);
 
             var result = handler.Handle(command);
 
@@ -59,7 +59,7 @@ namespace UnitTests.CommandHandlers
         public void ShouldCreatePaymentMethod_When_CommandIsValid()
         {
             var command = new CreatePaymentMethodCommand("James B", "1234 1234 1234 1234", "1234", Guid.NewGuid());
-            var handler = new CustomerCommandHandler(new CustomerRepositoryMock());
+            var handler = new CustomerCommandHandler(new CustomerRepositoryMock(), null);
 
             var result = handler.Handle(command);
 
@@ -70,7 +70,7 @@ namespace UnitTests.CommandHandlers
         public void ShouldNotCreatePaymentMethod_When_CommandIsInvalid()
         {
             var command = new CreatePaymentMethodCommand("", "", "", Guid.NewGuid());
-            var handler = new CustomerCommandHandler(new CustomerRepositoryMock());
+            var handler = new CustomerCommandHandler(new CustomerRepositoryMock(), null);
 
             var result = handler.Handle(command);
 

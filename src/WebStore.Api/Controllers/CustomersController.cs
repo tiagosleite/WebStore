@@ -14,6 +14,7 @@ namespace WebStore.Api.Controllers
     {
         private readonly ICustomerRepository _repository;
         private readonly CustomerCommandHandler _handler;
+        
         public CustomersController(ICustomerRepository repository, CustomerCommandHandler handler)
         {
             _handler = handler;
@@ -41,17 +42,6 @@ namespace WebStore.Api.Controllers
         public IActionResult Post([FromBody]CreateCustomerCommand command)
         {
             var result = _handler.Handle(command);
-
-            if (!result.IsValid)
-                return BadRequest(result);
-
-            return Ok(result);
-        }
-
-        [HttpPost("{customerId:guid}/address")]
-        public IActionResult Post(Guid customerId, [FromBody]CreateAddressCommand command)
-        {
-            var result = _handler.Handle(command, customerId);
 
             if (!result.IsValid)
                 return BadRequest(result);
